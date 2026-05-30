@@ -501,6 +501,12 @@ export class CameraSystem {
       this.ensureListenerIsParentedCorrectly(scene);
 
       if (this.mode === CAMERA_MODE_FIRST_PERSON) {
+        // Ichifan: 一人称復帰時に layer 元に戻す
+        const _cam2 = scene.is && scene.is("vr-mode") ? scene.renderer.xr.getCamera() : scene.camera;
+        if (_cam2 && _cam2.layers) {
+          _cam2.layers.enable(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
+          _cam2.layers.disable(Layers.CAMERA_LAYER_THIRD_PERSON_ONLY);
+        }
         this.viewingCameraRotator.on = false;
         this.avatarRig.object3D.updateMatrices();
         setMatrixWorld(this.viewingRig.object3D, this.avatarRig.object3D.matrixWorld);
@@ -514,6 +520,14 @@ export class CameraSystem {
           setMatrixWorld(this.viewingCamera, tmpMat);
         }
       } else if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR || this.mode === CAMERA_MODE_THIRD_PERSON_FAR) {
+        // Ichifan: 三人称切替時に layer 切替 (一人称専用 mesh 隠す + 三人称専用 mesh 見せる + rotator 有効化)
+        const _cam = scene.is && scene.is("vr-mode") ? scene.renderer.xr.getCamera() : scene.camera;
+        if (_cam && _cam.layers) {
+          _cam.layers.disable(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
+          _cam.layers.enable(Layers.CAMERA_LAYER_THIRD_PERSON_ONLY);
+        }
+        if (this.viewingCameraRotator) this.viewingCameraRotator.on = true;
+        if (this.avatarPOVRotator) this.avatarPOVRotator.on = true;
         if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR) {
           tmpMat.makeTranslation(0, 1, 3);
         } else {

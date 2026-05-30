@@ -186,11 +186,11 @@ async function fetchAppConfigAndEnvironmentVars() {
 
   const localIp = process.env.HOST_IP || (await internalIpV4()) || "localhost";
 
-  process.env.RETICULUM_SERVER = host;
-  process.env.SHORTLINK_DOMAIN = shortlink_domain;
-  process.env.CORS_PROXY_SERVER = `hubs.local:8080/cors-proxy`;
-  process.env.THUMBNAIL_SERVER = thumbnail_server;
-  process.env.NON_CORS_PROXY_DOMAINS = `${localIp},hubs.local,localhost`;
+  process.env.RETICULUM_SERVER = process.env.RETICULUM_SERVER || host;
+  process.env.SHORTLINK_DOMAIN = process.env.SHORTLINK_DOMAIN || shortlink_domain;
+  process.env.CORS_PROXY_SERVER = process.env.CORS_PROXY_SERVER || `hubs.local:8080/cors-proxy`;
+  process.env.THUMBNAIL_SERVER = process.env.THUMBNAIL_SERVER || thumbnail_server;
+  process.env.NON_CORS_PROXY_DOMAINS = process.env.NON_CORS_PROXY_DOMAINS || `${localIp},hubs.local,localhost`;
 
   return appConfig;
 }

@@ -5,6 +5,7 @@ import { joinChildren } from "../misc/joinChildren";
 import styles from "./ContentMenu.scss";
 import { ReactComponent as ObjectsIcon } from "../icons/Objects.svg";
 import { ReactComponent as PeopleIcon } from "../icons/People.svg";
+import { ReactComponent as CameraIcon } from "../icons/Camera.svg";
 import { FormattedMessage } from "react-intl";
 
 export function ContentMenuButton({ active, disabled, children, ...props }) {
@@ -63,6 +64,18 @@ export function PeopleMenuButton(props) {
 PeopleMenuButton.propTypes = {
   presencecount: PropTypes.number
 };
+
+
+export function CameraModeMenuButton(props) {
+  return (
+    <ContentMenuButton {...props}>
+      <CameraIcon />
+      <span>
+        <FormattedMessage id="content-menu.camera-mode-menu-button" defaultMessage="視点切替" />
+      </span>
+    </ContentMenuButton>
+  );
+}
 
 export function ContentMenu({ children }) {
   return (

@@ -224,6 +224,12 @@ export class CameraSystem {
     this.horizontalDelta = 0;
     this.inspectZoom = 0;
     this.mode = CAMERA_MODE_SCENE_PREVIEW;
+    // Ichifan: URL クエリ ?thirdperson=true で起動時 三人称視点を default に
+    try {
+      if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("thirdperson") === "true") {
+        this._initThirdPerson = true;
+      }
+    } catch (e) {}
     this.snapshot = { audioTransform: new THREE.Matrix4(), matrixWorld: new THREE.Matrix4() };
     this.audioSourceTargetTransform = new THREE.Matrix4();
 

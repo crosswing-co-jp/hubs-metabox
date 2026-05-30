@@ -149,6 +149,7 @@
   "close-room-modal.room-name-match-error": "ルーム名が一致しません",
   "close-room-modal.title": "クローズルーム",
   "close-room-modal.type-to-confirm": "確認するルーム名を入力してください：{roomName}",
+  "content-menu.camera-mode-menu-button": "視点切替",
   "content-menu.custom-switch-person-view-button": "3人称視点切り替え",
   "content-menu.ecs-debug-menu-button": "ECSデバッグ",
   "content-menu.objects-menu-button": "オブジェクト",

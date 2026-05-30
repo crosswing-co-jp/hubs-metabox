@@ -1414,8 +1414,21 @@ class UIRoot extends Component {
                       <ContentMenu>
                         <CameraModeMenuButton
                           onClick={() => {
-                            const scene = document.querySelector("a-scene");
-                            scene?.systems?.["hubs-systems"]?.cameraSystem?.nextMode();
+                            // Ichifan: 複数の取得経路を試す
+                            const scene = (typeof AFRAME !== "undefined" && AFRAME.scenes && AFRAME.scenes[0]) || document.querySelector("a-scene") || this.scene;
+                            const cam = scene && scene.systems && scene.systems["hubs-systems"] && scene.systems["hubs-systems"].cameraSystem;
+                            if (!cam) {
+                              alert("[視点切替 ERROR] cameraSystem 取得失敗: scene=" + !!scene + " systems=" + !!(scene && scene.systems) + " hubs=" + !!(scene && scene.systems && scene.systems["hubs-systems"]));
+                              return;
+                            }
+                            const before = cam.mode;
+                            try { cam.nextMode(); } catch (e) { alert("[視点切替 EXC] " + e.message); return; }
+                            const after = cam.mode;
+                            if (before === after) {
+                              alert("[視点切替] mode 変わらず: " + before + " (= 早期 return された可能性)");
+                            } else {
+                              console.log("[視点切替] " + before + " -> " + after);
+                            }
                           }}
                         />
                         <PeopleMenuButton

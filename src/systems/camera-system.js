@@ -6,7 +6,7 @@ import qsTruthy from "../utils/qs_truthy";
 import { isTagged } from "../components/tags";
 import { qsGet } from "../utils/qs_truthy";
 const customFOV = qsGet("fov");
-const enableThirdPersonMode = qsTruthy("thirdPerson");
+const enableThirdPersonMode = qsTruthy("thirdPerson") || true; // Ichifan: 三人称視点 を常時有効化
 import { Layers } from "../camera-layers";
 import { HoveredRemoteRight, Inspectable, Inspected, LocalAvatar, RemoteAvatar } from "../bit-components";
 import {

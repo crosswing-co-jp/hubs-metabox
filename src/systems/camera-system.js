@@ -520,24 +520,33 @@ export class CameraSystem {
           setMatrixWorld(this.viewingCamera, tmpMat);
         }
       } else if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR || this.mode === CAMERA_MODE_THIRD_PERSON_FAR) {
-        // Ichifan: 三人称切替時に layer 切替 (一人称専用 mesh 隠す + 三人称専用 mesh 見せる + rotator 有効化)
+        // Ichifan: voice-cloud 流の追従ロジック (= アバター後ろから camera 追従)
         const _cam = scene.is && scene.is("vr-mode") ? scene.renderer.xr.getCamera() : scene.camera;
         if (_cam && _cam.layers) {
           _cam.layers.disable(Layers.CAMERA_LAYER_FIRST_PERSON_ONLY);
           _cam.layers.enable(Layers.CAMERA_LAYER_THIRD_PERSON_ONLY);
         }
-        if (this.viewingCameraRotator) this.viewingCameraRotator.on = true;
-        if (this.avatarPOVRotator) this.avatarPOVRotator.on = true;
+        this.viewingCameraRotator.on = false;
         if (this.mode === CAMERA_MODE_THIRD_PERSON_NEAR) {
           tmpMat.makeTranslation(0, 1, 3);
         } else {
           tmpMat.makeTranslation(0, 2, 8);
         }
         this.avatarRig.object3D.updateMatrices();
-        this.viewingRig.object3D.matrixWorld.copy(this.avatarRig.object3D.matrixWorld).multiply(tmpMat);
+        setMatrixWorld(this.viewingRig.object3D, this.avatarRig.object3D.matrixWorld);
+        if (scene.is("vr-mode")) {
+          this.viewingCamera.updateMatrices();
+          setMatrixWorld(this.avatarPOV.object3D, this.viewingCamera.matrixWorld);
+        } else {
+          this.avatarPOV.object3D.updateMatrices();
+          setMatrixWorld(this.viewingCamera, this.avatarPOV.object3D.matrixWorld.multiply(tmpMat));
+        }
+        this.avatarRig.object3D.updateMatrices();
+        this.viewingRig.object3D.matrixWorld.copy(this.avatarRig.object3D.matrixWorld);
         setMatrixWorld(this.viewingRig.object3D, this.viewingRig.object3D.matrixWorld);
         this.avatarPOV.object3D.quaternion.copy(this.viewingCamera.quaternion);
         this.avatarPOV.object3D.matrixNeedsUpdate = true;
+
       } else if (this.mode === CAMERA_MODE_INSPECT) {
         this.avatarPOVRotator.on = false;
         this.viewingCameraRotator.on = false;

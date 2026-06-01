@@ -62,6 +62,10 @@ export function getCurrentAudioSettings(el) {
     preferencesOverrides.audioType = AudioType.Stereo;
   }
 
+  if (APP.hub?.disable_audio_attenuation && sourceType === SourceType.AVATAR_AUDIO_SOURCE) {
+    preferencesOverrides.rolloffFactor = 0;
+  }
+
   const settings = Object.assign(
     {},
     defaults,
@@ -76,7 +80,8 @@ export function getCurrentAudioSettings(el) {
     APP.clippingState.has(el) ||
     APP.mutedState.has(el) ||
     APP.linkedMutedState.has(el) ||
-    (isNonModeratorAvatarAudio && !APP.hub.member_permissions?.voice_chat)
+    (isNonModeratorAvatarAudio && !APP.hub.member_permissions?.voice_chat) ||
+    (APP.hub?.disable_scene_audio && sourceType !== SourceType.AVATAR_AUDIO_SOURCE)
   ) {
     settings.gain = 0;
   } else if (APP.gainMultipliers.has(el)) {

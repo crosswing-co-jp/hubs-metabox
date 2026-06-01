@@ -248,7 +248,9 @@ export function display(world, physicsSystem, frame, capturedEid, heldMediaTypes
 
   const guideEid = MediaFrame.guide[frame];
   const guideObj = world.eid2obj.get(guideEid);
-  guideObj.visible = !!(MediaFrame.mediaType[frame] & heldMediaTypes);
+  guideObj.visible = window.APP?.hub?.disable_media_frames
+    ? false
+    : !!(MediaFrame.mediaType[frame] & heldMediaTypes);
 
   if (guideObj.visible) {
     const capturedEid = world.nid2eid.get(MediaFrame.capturedNid[frame]) || 0;

@@ -235,6 +235,40 @@ export function RoomSettingsSidebar({
           </div>
         </InputField>
         <InputField
+          label={<FormattedMessage id="room-settings-sidebar.room-features" defaultMessage="Room Features" />}
+          fullWidth
+        >
+          <div className={styles.roomPermissions}>
+            <ToggleInput
+              label={
+                <FormattedMessage
+                  id="room-settings-sidebar.disable-scene-audio"
+                  defaultMessage="Disable BGM (scene audio)"
+                />
+              }
+              {...register("disable_scene_audio")}
+            />
+            <ToggleInput
+              label={
+                <FormattedMessage
+                  id="room-settings-sidebar.disable-audio-attenuation"
+                  defaultMessage="Disable voice distance attenuation"
+                />
+              }
+              {...register("disable_audio_attenuation")}
+            />
+            <ToggleInput
+              label={
+                <FormattedMessage
+                  id="room-settings-sidebar.disable-media-frames"
+                  defaultMessage="Hide media frames"
+                />
+              }
+              {...register("disable_media_frames")}
+            />
+          </div>
+        </InputField>
+        <InputField
           label={<FormattedMessage id="room-settings-sidebar.bitecs-client" defaultMessage="bitECS based Client" />}
           fullWidth
         >

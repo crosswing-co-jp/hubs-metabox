@@ -195,10 +195,6 @@ const mountUI = async (retPhxChannel, customRoutes, layout) => {
   if (configs.POSTGREST_SERVER) {
     dataProvider = postgrestClient(configs.POSTGREST_SERVER);
     authProvider = postgrestAuthenticatior.createAuthProvider(retPhxChannel);
-    // reticulum の /api/postgrest proxy は :auth_required で Guardian ログイントークンを要求し、
-    // :proxy_api (RewriteAuthorizationHeaderToPerms) で perms token に書き換えて postgrest へ転送する。
-    // そのため perms token ではなくログイントークンを送る必要がある (未設定だと 401→再ログイン)。
-    postgrestAuthenticatior.setAuthToken(store.state.credentials.token);
     await postgrestAuthenticatior.refreshPermsToken();
 
     // Refresh perms regularly
